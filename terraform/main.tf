@@ -9,9 +9,7 @@ module "ec2_vpc" {
   azs            = ["eu-west-1a"]
   public_subnets = ["10.0.1.0/24"]
 
-  tags = {
-    Terraform = "true"
-  }
+  tags = var.common_tags
 }
 
 module "ec2_security_group" {
@@ -48,9 +46,7 @@ module "ec2_security_group" {
     }
   ]
 
-  tags = {
-    Terraform = "true"
-  }
+  tags = var.common_tags
 }
 
 resource "aws_key_pair" "ec2_ssh_key" {
