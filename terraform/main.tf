@@ -21,6 +21,7 @@ module "ec2_security_group" {
   vpc_id = module.ec2_vpc.vpc_id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
+  egress_cidr_blocks  = ["0.0.0.0/0"]
 
   ingress_with_cidr_blocks = [
     {
@@ -42,6 +43,16 @@ module "ec2_security_group" {
       from_port   = 443
       to_port     = 443
       protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      description = "Allow all traffic to the internet"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
       cidr_blocks = "0.0.0.0/0"
     }
   ]
