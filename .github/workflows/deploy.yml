@@ -1,0 +1,46 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Go into project directory
+        run: cd app
+
+      - name: Install pnpm
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -
+          export PATH="$HOME/.pnpm/bin:$PATH"
+          pnpm install
+
+      - name: Install project dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Transfer artifacts to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "dist"
+          target: "/var/www/"
+
+      - name: Rename dist to vite-app
+        run: |
+          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP }} "sudo mv /var/www/dist /var/www/vite-app"
+
+      - name: Restart nginx
+        run: |
+          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP }} "sudo service nginx restart"
