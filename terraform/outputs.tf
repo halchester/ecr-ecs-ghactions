@@ -1,7 +1,16 @@
-output "instance_public_up" {
-  value = module.ec2_app.public_ip
+output "ecr_uri" {
+  value = module.blog_resources_repository.repository_url
 }
 
-output "instance_public_dns" {
-  value = module.ec2_app.public_dns
+output "ecr_arn" {
+  value = module.blog_resources_repository.repository_arn
+}
+
+output "ecr_user_access_key" {
+  value = aws_iam_access_key.ecr_user.id
+}
+
+output "ecr_user_secret_key" {
+  value     = aws_iam_access_key.ecr_user.secret
+  sensitive = true
 }

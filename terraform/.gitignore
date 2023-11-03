@@ -38,9 +38,9 @@ override.tf.json
 terraform.rc
 
 # Ignore SSH files
-ec2-key
-ec2-key.pem
-ec2-key.pub
+ssh-key
+ssh-key.pem
+ssh-key.pub
 
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
