@@ -25,8 +25,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2.0.1
         id: login-ecr
-        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_REPOSITORY_URL }}
 
       - name: Set outputs
         id: vars
@@ -39,4 +39,6 @@ jobs:
           docker tag vite-app:latest ${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}
 
       - name: Push image to ECR
-        run: docker push ${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}
+        run: |
+          docker push ${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}
+          echo "::set-output name=image::${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}"
