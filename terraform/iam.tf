@@ -14,6 +14,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
       }
     ]
   })
+  tags = var.common_tags
 }
 
 resource "aws_iam_policy_attachment" "ecs_task_execution_role_policy_attach" {

@@ -22,6 +22,23 @@ module "web_access_sg" {
       protocol    = "tcp"
       cidr_blocks = "0.0.0.0/0"
     },
+    {
+      description = "Allow application access"
+      from_port   = 8000
+      to_port     = 8000
+      protocol    = "tcp"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
+  egress_cidr_blocks = ["0.0.0.0/0"]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = "0.0.0.0/0"
+    }
   ]
 
   tags = var.common_tags
