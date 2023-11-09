@@ -40,5 +40,5 @@ resource "aws_iam_policy_attachment" "github_actions_user_policy_attach" {
   users = [
     aws_iam_user.github_actions_user.name
   ]
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
