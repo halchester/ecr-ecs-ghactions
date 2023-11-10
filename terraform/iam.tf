@@ -39,7 +39,6 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
   name = "github-actions-user-access-policy"
   depends_on = [
     module.vite_app_repository,
-    aws_ecs_task_definition.vite_app_runner,
     aws_ecs_service.vite_app_service
   ]
 
@@ -73,7 +72,7 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
           "ecs:UpdateService"
         ],
         Resource = [
-          aws_ecs_task_definition.vite_app_runner.arn,
+          "arn:aws:ecs:*:*:task-definition/*",
           aws_ecs_service.vite_app_service.id
         ]
       }
