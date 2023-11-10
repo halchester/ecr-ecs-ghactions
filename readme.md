@@ -1,6 +1,6 @@
 # Terraform, ECS, ECR, Github Actions
 
-> **Disclaimer**: This project is for educational purposes only and related to a [blog post](https://dev.to/halchester). It is not intended to be used in production. The code is not optimized and may contain bugs. Use at your own risk.
+> **Disclaimer**: This project is for educational purposes only and related to a [blog post](https://dev.to/halchester/deploying-container-applications-on-aws-with-cicd-pipelines-5d53). It is not intended to be used in production. The code is not optimized and may contain bugs. Use at your own risk.
 
 In this project, we will create a CI/CD pipeline using Github Actions to deploy a simple web application to ECS. The application is a simple vite application that will be dockerized and pushed to ECR. The pipeline will be triggered on every push to the main branch. The pipeline will build the docker image, push it to ECR, and update the ECS service with the new image. All the infrastructure will be created using Terraform.
 

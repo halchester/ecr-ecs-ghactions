@@ -12,11 +12,11 @@ function App() {
             Chester
           </a>{" "}
           |{" "}
-          <a href="#" target="_blank">
+          <a href="https://github.com/halchester/ecr-ecs-ghactions" target="_blank">
             Github
           </a>{" "}
           |{" "}
-          <a href="#" target="_blank">
+          <a href="https://dev.to/halchester/deploying-container-applications-on-aws-with-cicd-pipelines-5d53" target="_blank">
             See original post
           </a>
         </code>
