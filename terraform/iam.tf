@@ -35,10 +35,39 @@ resource "aws_iam_access_key" "github_actions_user_access_key" {
   user = aws_iam_user.github_actions_user.name
 }
 
+resource "aws_iam_policy" "github_actions_user_access_policy" {
+  name       = "github-actions-user-access-policy"
+  depends_on = [module.vite_app_repository]
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:CompleteLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:InitiateLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage"
+        ],
+        Resource = [module.vite_app_repository.repository_url]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:GetAuthorizationToken"
+        ],
+        Resource = ["*"]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_policy_attachment" "github_actions_user_policy_attach" {
   name = "github-actions-user-policy-attach"
   users = [
     aws_iam_user.github_actions_user.name
   ]
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+  policy_arn = aws_iam_policy.github_actions_user_access_policy.arn
 }
