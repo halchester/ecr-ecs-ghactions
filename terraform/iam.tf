@@ -36,14 +36,18 @@ resource "aws_iam_access_key" "github_actions_user_access_key" {
 }
 
 resource "aws_iam_policy" "github_actions_user_access_policy" {
-  name       = "github-actions-user-access-policy"
-  depends_on = [module.vite_app_repository]
+  name = "github-actions-user-access-policy"
+  depends_on = [
+    module.vite_app_repository,
+    aws_ecs_task_definition.vite_app_runner,
+    aws_ecs_service.vite_app_service
+  ]
 
-  # https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push.html
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
+        # https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push.html
         Effect = "Allow",
         Action = [
           "ecr:CompleteLayerUpload",
@@ -60,6 +64,18 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
           "ecr:GetAuthorizationToken"
         ],
         Resource = ["*"]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecs:DescribeTaskDefinition",
+          "ecs:RegisterTaskDefinition",
+          "ecs:UpdateService"
+        ],
+        Resource = [
+          aws_ecs_task_definition.vite_app_runner.arn,
+          aws_ecs_service.vite_app_service.id
+        ]
       }
     ]
   })
