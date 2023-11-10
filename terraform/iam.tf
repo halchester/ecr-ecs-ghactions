@@ -72,7 +72,7 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
           "ecs:UpdateService"
         ],
         Resource = [
-          "arn:aws:ecs:*:*:task-definition/*",
+          "*",
           aws_ecs_service.vite_app_service.id
         ]
       }
