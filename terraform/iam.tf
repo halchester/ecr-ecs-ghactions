@@ -82,9 +82,7 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
         Action = [
           "iam:PassRole"
         ],
-        Resource = [
-          aws_iam_role.ecs_task_execution_role.arn
-        ],
+        Resource = [aws_iam_role.ecs_task_execution_role.arn],
         Condition = {
           StringEquals = {
             "iam:PassedToService" : "ecs-tasks.amazonaws.com"
