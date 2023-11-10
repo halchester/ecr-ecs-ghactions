@@ -21,7 +21,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+ß
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2.0.1
         id: login-ecr
@@ -30,15 +30,13 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Build and tag Docker image
+      - name: Build, tag and Push image to Amazon ECR
         id: build-and-tag-docker-image
         working-directory: ./app
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{secrets.AWS_ECR_REPOSITORY}}
+          IMAGE_TAG: git-${{ steps.vars.outputs.sha_short }}
         run: |
-          docker build -t vite-app:latest .
-          docker tag vite-app:latest ${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}
-
-      - name: Push image to ECR
-        working-directory: ./app
-        run: |
-          docker push ${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}
-          echo "::set-output name=image::${{ secrets.AWS_ECR_REPOSITORY_URL}}:git-${{ steps.vars.outputs.sha_short }}"
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
