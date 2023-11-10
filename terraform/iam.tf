@@ -39,7 +39,8 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
   name = "github-actions-user-access-policy"
   depends_on = [
     module.vite_app_repository,
-    aws_ecs_service.vite_app_service
+    aws_ecs_service.vite_app_service,
+    aws_iam_role.ecs_task_execution_role
   ]
 
   policy = jsonencode({
@@ -75,6 +76,20 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
           "*",
           aws_ecs_service.vite_app_service.id
         ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "iam:PassRole"
+        ],
+        Resource = [
+          aws_iam_role.ecs_task_execution_role.arn
+        ],
+        Condition = {
+          StringEquals = {
+            "iam:PassedToService" : "ecs-tasks.amazonaws.com"
+          }
+        }
       }
     ]
   })
