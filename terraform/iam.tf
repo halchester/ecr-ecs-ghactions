@@ -70,6 +70,7 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
         Action = [
           "ecs:DescribeTaskDefinition",
           "ecs:RegisterTaskDefinition",
+          "ecs:DescribeServices",
           "ecs:UpdateService"
         ],
         Resource = [
