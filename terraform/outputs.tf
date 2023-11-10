@@ -2,10 +2,6 @@ output "ecr_repo_url" {
   value = module.vite_app_repository.repository_url
 }
 
-output "ecr_arn" {
-  value = module.vite_app_repository.repository_arn
-}
-
 output "github_actions_user_access_key_id" {
   value = aws_iam_access_key.github_actions_user_access_key.id
 }

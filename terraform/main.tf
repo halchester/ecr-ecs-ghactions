@@ -30,12 +30,12 @@ module "vite_app_repository" {
 }
 
 resource "aws_ecs_cluster" "vite_app_cluster" {
-  name = "vite-app-cluster"
+  name = var.ecs_cluster_name
   tags = var.common_tags
 }
 
 resource "aws_ecs_task_definition" "vite_app_runner" {
-  family                   = "vite-app-runner"
+  family                   = var.ecs_task_definition_name
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "512"
@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "vite_app_runner" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
     {
-      name   = "vite-app"
+      name   = var.ecs_container_name
       image  = "${module.vite_app_repository.repository_url}:latest"
       cpu    = 512
       memory = 1024
@@ -61,7 +61,7 @@ resource "aws_ecs_task_definition" "vite_app_runner" {
 }
 
 resource "aws_ecs_service" "vite_app_service" {
-  name            = "vite-app-service"
+  name            = var.ecs_service_name
   cluster         = aws_ecs_cluster.vite_app_cluster.id
   task_definition = aws_ecs_task_definition.vite_app_runner.arn
   launch_type     = "FARGATE"
