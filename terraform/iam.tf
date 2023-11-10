@@ -39,6 +39,7 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
   name       = "github-actions-user-access-policy"
   depends_on = [module.vite_app_repository]
 
+  # https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-push.html
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -51,7 +52,7 @@ resource "aws_iam_policy" "github_actions_user_access_policy" {
           "ecr:BatchCheckLayerAvailability",
           "ecr:PutImage"
         ],
-        Resource = [module.vite_app_repository.repository_url]
+        Resource = [module.vite_app_repository.repository_arn]
       },
       {
         Effect = "Allow",
