@@ -9,20 +9,6 @@ module "web_access_sg" {
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_with_cidr_blocks = [
     {
-      description = "Allow HTTP access"
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"
-    },
-    {
-      description = "Allow HTTPS access"
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"
-    },
-    {
       description = "Allow application access"
       from_port   = 8000
       to_port     = 8000
